@@ -2,6 +2,11 @@ import * as mongoose from 'mongoose';
 
 export const UserSchema = new mongoose.Schema({
   username: String,
-  email: String,
+  email: {
+    type: String,
+    unique: true,
+    required: [true, "email required."],
+},
   password: String,
+  salt: String
 });
