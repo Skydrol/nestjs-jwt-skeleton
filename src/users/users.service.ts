@@ -25,6 +25,14 @@ export class UsersService {
     return `This action returns a #${id} user`;
   }
 
+  async findOneByEmail(email: string) {
+    return this.userModel.findOne({email: email});
+  } 
+
+  async findOneByUsername(username: string) {
+    return this.userModel.findOne({username: username});
+  }
+
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }

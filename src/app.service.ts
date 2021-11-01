@@ -11,6 +11,6 @@ export class AppService {
   }
 
   getHello(): string {
-    return this.dbConfig;    
+    return 'hello!!';    
   }
 }

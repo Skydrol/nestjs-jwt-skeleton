@@ -6,7 +6,6 @@ export const UserSchema = new mongoose.Schema({
     type: String,
     unique: true,
     required: [true, "email required."],
-},
-  password: String,
-  salt: String
+  },
+  password: String  
 });
