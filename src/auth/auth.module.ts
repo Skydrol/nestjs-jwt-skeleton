@@ -6,6 +6,7 @@ import { UsersModule } from 'src/users/users.module';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
+import { SessionSerializer } from './session.serializer';
 @Module({
   imports: [
     UsersModule, 

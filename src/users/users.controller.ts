@@ -10,17 +10,15 @@ export class UsersController {
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-
+    
     const saltOrRounds = 10;   
     createUserDto.password = await bcrypt.hash(createUserDto.password, saltOrRounds);
     return this.usersService.create(createUserDto);
   }
 
   @Post('user')
-  async login(@Body() createUserDto: CreateUserDto){
-    
+  async login(@Body() createUserDto: CreateUserDto){    
     return this.usersService.findOneByEmail(createUserDto.email);
-
   }
 
   @Get()
