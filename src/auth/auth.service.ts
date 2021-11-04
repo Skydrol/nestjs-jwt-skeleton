@@ -24,7 +24,8 @@ export class AuthService {
       if(isMatch){
         const userReturn = { 
           sub: user._id,        
-          name: user.username
+          name: user.username,
+          roles: user.roles
         }
         return userReturn;
       }

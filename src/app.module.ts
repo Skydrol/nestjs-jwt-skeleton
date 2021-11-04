@@ -22,10 +22,10 @@ import { APP_GUARD } from '@nestjs/core';
   controllers: [AppController, AuthController],
   providers: [
     AppService, 
-    {
-    provide: APP_GUARD,
-    useClass: RolesGuard,
-    }
+    // {
+    // provide: APP_GUARD,
+    // useClass: RolesGuard,
+    // }
   ],
 })
 export class AppModule {}

@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { hasRoles } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { Role } from 'src/auth/enums/role.enum';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users')
@@ -17,10 +18,10 @@ export class UsersController {
     const saltOrRounds = 10;   
     createUserDto.password = await bcrypt.hash(createUserDto.password, saltOrRounds);
     return this.usersService.create(createUserDto);
-  }
+  }  
   
-  @hasRoles('ADMIN')
   @UseGuards(RolesGuard)
+  @hasRoles(Role.Admin)
   @Get('all')
   findAll() {
     return this.usersService.findAll();
