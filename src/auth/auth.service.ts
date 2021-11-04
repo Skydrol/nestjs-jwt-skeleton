@@ -12,31 +12,39 @@ export class AuthService {
   ){}
 
   async validateUser(email: string, password: string): Promise<any> { 
+    
     const user = await this.usersService.findOneByEmail(email); 
     
     const isMatch = await bcrypt.compare(password, user.password);
     
     if(user && isMatch) {
-      const { password, username, ...rest } = user;
-      return rest;
+      const userReturn = { 
+        sub: user._id,        
+        name: user.username
+      }
+      return userReturn;
     }
 
     return null;
 
   }
 
-  async login(user: User) {
-    const payload = { name: user.username, sub: user.id};
+  async login(user: User) {    
     
-    const validatedUser = await this.validateUser(user.email, user.password);
+    const validatedUser = await this.validateUser(user.email, user.password);    
     
     if(validatedUser != null){
       return {
-        status: 'Logged!',      
-        access_token: this.jwtService.sign(payload),
-        //user: validatedUser,
+        status: 'Logged In!',      
+        access_token: this.jwtService.sign(validatedUser),
+        user: validatedUser,
       };
     }
+
+    return {
+      status: 'Not logged In!',
+      error : 'Wrong Credentials!'
+    };
     
   }
 }
