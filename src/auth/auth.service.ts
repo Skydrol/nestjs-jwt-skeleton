@@ -15,14 +15,20 @@ export class AuthService {
     
     const user = await this.usersService.findOneByEmail(email); 
     
-    const isMatch = await bcrypt.compare(password, user.password);
     
-    if(user && isMatch) {
-      const userReturn = { 
-        sub: user._id,        
-        name: user.username
+    
+    if(user) {
+
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if(isMatch){
+        const userReturn = { 
+          sub: user._id,        
+          name: user.username
+        }
+        return userReturn;
       }
-      return userReturn;
+      
     }
 
     return null;
@@ -33,7 +39,7 @@ export class AuthService {
     
     const validatedUser = await this.validateUser(user.email, user.password);    
     
-    if(validatedUser != null){
+    if(validatedUser){
       return {
         status: 'Logged In!',      
         access_token: this.jwtService.sign(validatedUser),
