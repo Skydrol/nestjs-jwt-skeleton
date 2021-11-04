@@ -4,6 +4,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { hasRoles } from 'src/auth/decorators/roles.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users')
@@ -15,16 +17,28 @@ export class UsersController {
     const saltOrRounds = 10;   
     createUserDto.password = await bcrypt.hash(createUserDto.password, saltOrRounds);
     return this.usersService.create(createUserDto);
-  } 
+  }
   
+  @hasRoles('ADMIN')
+  @UseGuards(RolesGuard)
   @Get('all')
   findAll() {
     return this.usersService.findAll();
   }
 
   @Get('user/:id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    
+    const user = await this.usersService.findOne(id);
+    
+    const userData = {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      roles: user.roles
+    };
+
+    return userData;
   }
 
   @Patch('user/:id')
