@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { JwtService} from '@nestjs/jwt';
 import { User } from 'src/users/user.interface';
 import { UsersService } from 'src/users/users.service';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from '@node-rs/bcrypt';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -53,5 +54,18 @@ export class AuthService {
       error : 'Wrong Credentials!'
     };
     
+  }
+
+  async register(createUserDto: CreateUserDto) {
+    const { password, ...userData } = createUserDto;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await this.usersService.create({
+      ...userData,
+      password: hashedPassword,
+    });
+    return {
+      status: 'User Registered!',
+      user,
+    };
   }
 }
